@@ -17,12 +17,21 @@ import java.util.List;
 /**
  * Created by wenweihu86 on 2017/5/9.
  */
+
+/**
+ * 命令执行./bin/run_server.sh
+ * ./data
+ * "127.0.0.1:8051:1,127.0.0.1:8052:2,127.0.0.1:8053:3" "127.0.0.1:8051:1"
+ */
 public class ServerMain {
     public static void main(String[] args) {
         if (args.length != 3) {
             System.out.printf("Usage: ./run_server.sh DATA_PATH CLUSTER CURRENT_NODE\n");
             System.exit(-1);
         }
+
+
+
         // parse args
         // raft data dir
         String dataPath = args[0];
@@ -48,6 +57,10 @@ public class ServerMain {
         raftOptions.setMaxSegmentFileSize(1024 * 1024);
         // 应用状态机
         ExampleStateMachine stateMachine = new ExampleStateMachine(raftOptions.getDataDir());
+
+        /**
+         * 服务注册
+         */
         // 初始化RaftNode
         RaftNode raftNode = new RaftNode(raftOptions, serverList, localServer, stateMachine);
         // 注册Raft节点之间相互调用的服务
@@ -56,9 +69,13 @@ public class ServerMain {
         // 注册给Client调用的Raft服务
         RaftClientService raftClientService = new RaftClientServiceImpl(raftNode);
         server.registerService(raftClientService);
+
         // 注册应用自己提供的服务
         ExampleService exampleService = new ExampleServiceImpl(raftNode, stateMachine);
         server.registerService(exampleService);
+
+
+
         // 启动RPCServer，初始化Raft节点
         server.start();
         raftNode.init();

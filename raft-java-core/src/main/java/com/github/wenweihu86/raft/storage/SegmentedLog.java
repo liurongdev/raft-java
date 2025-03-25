@@ -140,6 +140,8 @@ public class SegmentedLog {
                 } else {
                     newSegment = startLogIndexSegmentMap.lastEntry().getValue();
                 }
+
+                //写入index
                 // 写proto到segment中
                 if (entry.getIndex() == 0) {
                     entry = RaftProto.LogEntry.newBuilder(entry)

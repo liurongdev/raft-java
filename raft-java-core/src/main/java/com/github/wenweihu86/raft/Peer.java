@@ -18,6 +18,12 @@ public class Peer {
     // 已复制日志的最高索引值
     private long matchIndex;
     private volatile Boolean voteGranted;
+
+
+    /**
+     * 表示follow是否已经追上快master
+     * 落后的索引值小于配置的误差
+     */
     private volatile boolean isCatchUp;
 
     public Peer(RaftProto.Server server) {

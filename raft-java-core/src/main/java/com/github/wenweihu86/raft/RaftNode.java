@@ -140,6 +140,9 @@ public class RaftNode {
         resetElectionTimer();
     }
 
+
+
+    //复制到其他节点
     // client set command
     public boolean replicate(byte[] data, RaftProto.EntryType entryType) {
         lock.lock();
@@ -168,6 +171,8 @@ public class RaftNode {
                 });
             }
 
+
+            //不需要等待
             if (raftOptions.isAsyncWrite()) {
                 // 主节点写成功后，就返回。
                 return true;

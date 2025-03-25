@@ -69,6 +69,7 @@ public class ExampleServiceImpl implements ExampleService {
             ExampleProto.SetResponse responseFromLeader = exampleService.set(request);
             responseBuilder.mergeFrom(responseFromLeader);
         } else {
+            //主节点
             // 数据同步写入raft集群
             byte[] data = request.toByteArray();
             boolean success = raftNode.replicate(data, RaftProto.EntryType.ENTRY_TYPE_DATA);
